@@ -2,6 +2,7 @@ package com.dkd.manage.service.impl;
 
 import java.util.List;
 import com.dkd.common.utils.DateUtils;
+import com.dkd.manage.domain.vo.PartnerVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dkd.manage.mapper.PartnerMapper;
@@ -34,7 +35,7 @@ public class PartnerServiceImpl implements IPartnerService
 
     /**
      * 查询合作商管理列表
-     * 
+     *
      * @param partner 合作商管理
      * @return 合作商管理
      */
@@ -92,5 +93,10 @@ public class PartnerServiceImpl implements IPartnerService
     public int deletePartnerById(Long id)
     {
         return partnerMapper.deletePartnerById(id);
+    }
+
+    @Override
+    public List<PartnerVO> selectPartnerVOList(Partner partner) {
+        return  partnerMapper.selectPartnerVOList(partner);
     }
 }

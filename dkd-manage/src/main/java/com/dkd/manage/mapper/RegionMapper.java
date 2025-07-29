@@ -2,6 +2,7 @@ package com.dkd.manage.mapper;
 
 import java.util.List;
 import com.dkd.manage.domain.Region;
+import com.dkd.manage.domain.vo.RegionVO;
 
 /**
  * 区域管理Mapper接口
@@ -58,4 +59,7 @@ public interface RegionMapper
      * @return 结果
      */
     public int deleteRegionByIds(Long[] ids);
+
+
+    public List<RegionVO> selectRegionVOList(Region region);
 }

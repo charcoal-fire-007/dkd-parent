@@ -34,7 +34,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPartnerVo"/>
         where id = #{id}
     </select>
-        
+
+
+    <select id="selectPartnerVOList" resultType="com.dkd.manage.domain.vo.PartnerVO">
+        SELECT
+        p.*,
+        IFNULL(n.node_count, 0) AS node_count
+        FROM
+        tb_partner p
+        LEFT JOIN (
+        SELECT
+        partner_id,
+        COUNT(*) AS node_count
+        FROM
+        tb_node
+        GROUP BY
+        partner_id
+        ) n ON p.id = n.partner_id
+        <where>
+            <if test="partnerName != null and partnerName != ''">
+                AND p.partner_name LIKE CONCAT('%', #{partnerName}, '%')
+            </if>
+        </where>
+    </select>
+
     <insert id="insertPartner" parameterType="Partner" useGeneratedKeys="true" keyProperty="id">
         insert into tb_partner
         <trim prefix="(" suffix=")" suffixOverrides=",">
