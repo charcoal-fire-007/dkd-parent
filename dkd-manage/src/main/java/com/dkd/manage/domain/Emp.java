@@ -35,7 +35,8 @@ public class Emp extends BaseEntity
     /** 角色编号 */
     private String roleCode;
 
-    /** 角色名称 */
+    /** 角色 */
+    @Excel(name = "角色")
     private String roleName;
 
     /** 联系电话 */
@@ -43,7 +44,6 @@ public class Emp extends BaseEntity
     private String mobile;
 
     /** 员工头像 */
-    @Excel(name = "员工头像")
     private String image;
 
     /** 是否启用 */

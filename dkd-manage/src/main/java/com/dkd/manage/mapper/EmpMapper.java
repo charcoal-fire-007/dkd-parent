@@ -2,7 +2,6 @@ package com.dkd.manage.mapper;
 
 import java.util.List;
 import com.dkd.manage.domain.Emp;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 人员列表Mapper接口
@@ -10,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @author charcoal
  * @date 2025-07-29
  */
-public interface EmpMapper
+public interface EmpMapper 
 {
     /**
      * 查询人员列表
