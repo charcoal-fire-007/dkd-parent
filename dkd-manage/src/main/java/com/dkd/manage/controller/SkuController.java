@@ -1,7 +1,10 @@
 package com.dkd.manage.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.dkd.common.annotation.Excel;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,9 @@ import com.dkd.manage.domain.Sku;
 import com.dkd.manage.service.ISkuService;
 import com.dkd.common.utils.poi.ExcelUtil;
 import com.dkd.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
+
+import static com.dkd.framework.datasource.DynamicDataSourceContextHolder.log;
 
 /**
  * 商品管理Controller
@@ -57,6 +63,20 @@ public class SkuController extends BaseController
         List<Sku> list = skuService.selectSkuList(sku);
         ExcelUtil<Sku> util = new ExcelUtil<Sku>(Sku.class);
         util.exportExcel(response, list, "商品管理数据");
+    }
+
+//    导入商品列表
+    @PreAuthorize("@ss.hasPermi('manage:sku:add')")
+    @Log(title = "商品管理", businessType = BusinessType.IMPORT)
+    @PostMapping("/import")
+    public AjaxResult excelImport(MultipartFile file) throws Exception
+    {
+        ExcelUtil<Sku> util = new ExcelUtil<>(Sku.class);
+        List<Sku> list = util.importExcel(file.getInputStream());
+        list.forEach(sku -> sku.setCreateTime(new Date()));
+        list.forEach(sku -> sku.setUpdateTime(new Date()));
+        log.info("导入商品列表：{}", list);
+        return success(skuService.insertSkuList(list));
     }
 
     /**

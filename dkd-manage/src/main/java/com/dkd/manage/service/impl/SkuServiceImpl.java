@@ -104,4 +104,13 @@ public class SkuServiceImpl implements ISkuService
     {
         return skuMapper.deleteSkuBySkuId(skuId);
     }
+
+    @Override
+    public String insertSkuList(List<Sku> list) {
+        int count = skuMapper.insertSkuList(list);
+        if(count != list.size()){
+            throw new RuntimeException("商品导入失败");
+        }
+        return "商品导入成功";
+    }
 }

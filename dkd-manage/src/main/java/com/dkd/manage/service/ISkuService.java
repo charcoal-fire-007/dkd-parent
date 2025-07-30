@@ -58,4 +58,6 @@ public interface ISkuService
      * @return 结果
      */
     public int deleteSkuBySkuId(Long skuId);
+
+    String insertSkuList(List<Sku> list);
 }
