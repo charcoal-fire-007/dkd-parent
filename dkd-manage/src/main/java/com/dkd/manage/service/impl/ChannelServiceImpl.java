@@ -99,4 +99,9 @@ public class ChannelServiceImpl implements IChannelService
     public int batchInsertChannels(List<Channel> channelList) {
         return channelMapper.batchInsertChannels(channelList);
     }
+
+    @Override
+    public int countChannelBySkuIds(Long[] skuIds) {
+        return channelMapper.countChannelBySkuIds(skuIds);
+    }
 }

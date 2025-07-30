@@ -38,7 +38,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectChannelVo"/>
         where id = #{id}
     </select>
-        
+    <select id="countChannelBySkuIds" resultType="java.lang.Integer">
+        select count(*) from tb_channel where sku_id in
+        <foreach collection="array" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
     <insert id="batchInsertChannels" parameterType="java.util.List" >
         insert into tb_channel
         (channel_code, vm_id, inner_code, max_capacity, current_capacity, last_supply_time, create_time, update_time)

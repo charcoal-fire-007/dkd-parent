@@ -60,4 +60,12 @@ public interface ChannelMapper
     public int deleteChannelByIds(Long[] ids);
 
     public int batchInsertChannels(List<Channel>  channelList);
+
+    /**
+     * 根据商品管理主键查询关联的货道数量
+     * @param skuIds
+     * @return
+     */
+
+    int countChannelBySkuIds(Long[] skuIds);
 }
