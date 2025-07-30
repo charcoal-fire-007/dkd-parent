@@ -143,5 +143,3 @@ dromara:
         bucket-name: charcoaldkd
         domain: https://charcoaldkd.oss-cn-beijing.aliyuncs.com/
         base-path: dkd-images/ # 基础路径
-
-
