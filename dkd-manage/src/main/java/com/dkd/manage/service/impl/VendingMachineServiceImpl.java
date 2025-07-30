@@ -1,7 +1,18 @@
 package com.dkd.manage.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.dkd.common.constant.DkdContants;
 import com.dkd.common.utils.DateUtils;
+import com.dkd.common.utils.uuid.UUIDUtils;
+import com.dkd.manage.domain.Channel;
+import com.dkd.manage.domain.Node;
+import com.dkd.manage.domain.VmType;
+import com.dkd.manage.service.IChannelService;
+import com.dkd.manage.service.INodeService;
+import com.dkd.manage.service.IVmTypeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dkd.manage.mapper.VendingMachineMapper;
@@ -19,6 +30,14 @@ public class VendingMachineServiceImpl implements IVendingMachineService
 {
     @Autowired
     private VendingMachineMapper vendingMachineMapper;
+    @Autowired
+    private IVmTypeService vmTypeService;
+    @Autowired
+    private INodeService nodeService;
+    @Autowired
+    private IChannelService channelService;
+
+
 
     /**
      * 查询设备管理
@@ -53,8 +72,35 @@ public class VendingMachineServiceImpl implements IVendingMachineService
     @Override
     public int insertVendingMachine(VendingMachine vendingMachine)
     {
+        String innerCode = UUIDUtils.getUUID();
+        vendingMachine.setInnerCode(innerCode);
+        VmType vmType = vmTypeService.selectVmTypeById(vendingMachine.getVmTypeId());
+        vendingMachine.setChannelMaxCapacity(vmType.getChannelMaxCapacity());
+        Node node = nodeService.selectNodeById(vendingMachine.getNodeId());
+        BeanUtils.copyProperties(node,vendingMachine,"id");
+        vendingMachine.setAddr(node.getAddress());
+        vendingMachine.setVmStatus(DkdContants.VM_STATUS_NODEPLOY);
         vendingMachine.setCreateTime(DateUtils.getNowDate());
-        return vendingMachineMapper.insertVendingMachine(vendingMachine);
+        vendingMachine.setUpdateTime(DateUtils.getNowDate());
+
+        int  result = vendingMachineMapper.insertVendingMachine(vendingMachine);
+
+        List<Channel> channels = new ArrayList<>();
+        //新增货道
+        for (int i = 0; i <= vmType.getVmRow(); i++) {
+            for (int j = 0; j <=vmType.getVmCol(); j++) {
+                Channel channel = new Channel();
+                channel.setVmId(vendingMachine.getId());
+                channel.setChannelCode(i+"-"+j);
+                channel.setInnerCode(vendingMachine.getInnerCode());
+                channel.setMaxCapacity(vmType.getChannelMaxCapacity());
+                channel.setCreateTime(DateUtils.getNowDate());
+                channel.setUpdateTime(DateUtils.getNowDate());
+                channels.add(channel);
+            }
+        }
+        channelService.batchInsertChannels( channels);
+        return result;
     }
 
     /**

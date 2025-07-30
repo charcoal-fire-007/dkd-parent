@@ -58,4 +58,6 @@ public interface IChannelService
      * @return 结果
      */
     public int deleteChannelById(Long id);
+
+    public int batchInsertChannels(List<Channel>  channelList);
 }

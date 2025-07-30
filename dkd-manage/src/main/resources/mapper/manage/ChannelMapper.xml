@@ -39,6 +39,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
+    <insert id="batchInsertChannels" parameterType="java.util.List" >
+        insert into tb_channel
+        (channel_code, vm_id, inner_code, max_capacity, current_capacity, last_supply_time, create_time, update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.channelCode}, #{item.vmId}, #{item.innerCode}, #{item.maxCapacity}, #{item.currentCapacity}, #{item.lastSupplyTime}, #{item.createTime}, #{item.updateTime})
+        </foreach>
+    </insert>
+
     <insert id="insertChannel" parameterType="Channel" useGeneratedKeys="true" keyProperty="id">
         insert into tb_channel
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -51,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lastSupplyTime != null">last_supply_time,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="channelCode != null and channelCode != ''">#{channelCode},</if>
             <if test="skuId != null">#{skuId},</if>
@@ -62,8 +71,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lastSupplyTime != null">#{lastSupplyTime},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
+
 
     <update id="updateChannel" parameterType="Channel">
         update tb_channel
