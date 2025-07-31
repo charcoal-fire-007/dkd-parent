@@ -52,6 +52,19 @@ public class SkuController extends BaseController
         return getDataTable(list);
     }
 
+//    /**
+//     * 查询商品管理
+//     *
+//     * @param skuId 商品管理主键
+//     * @return 商品管理
+//     */
+//    @PreAuthorize("@ss.hasPermi('manage:sku:query')")
+//    @GetMapping(value = "/{skuId}")
+//    public Sku selectSkuBySkuId(@PathVariable("skuId") Long skuId)
+//    {
+//        return skuService.selectSkuBySkuId(skuId);
+//    }
+
     /**
      * 导出商品管理列表
      */

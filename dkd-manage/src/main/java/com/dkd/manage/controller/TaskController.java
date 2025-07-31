@@ -2,6 +2,9 @@ package com.dkd.manage.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.dkd.manage.domain.dto.TaskDto;
+import com.dkd.manage.domain.vo.TaskVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,17 +37,6 @@ public class TaskController extends BaseController
     @Autowired
     private ITaskService taskService;
 
-    /**
-     * 查询工单列表
-     */
-    @PreAuthorize("@ss.hasPermi('manage:task:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(Task task)
-    {
-        startPage();
-        List<Task> list = taskService.selectTaskList(task);
-        return getDataTable(list);
-    }
 
     /**
      * 导出工单列表
@@ -69,16 +61,7 @@ public class TaskController extends BaseController
         return success(taskService.selectTaskByTaskId(taskId));
     }
 
-    /**
-     * 新增工单
-     */
-    @PreAuthorize("@ss.hasPermi('manage:task:add')")
-    @Log(title = "工单", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody Task task)
-    {
-        return toAjax(taskService.insertTask(task));
-    }
+
 
     /**
      * 修改工单
@@ -101,4 +84,31 @@ public class TaskController extends BaseController
     {
         return toAjax(taskService.deleteTaskByTaskIds(taskIds));
     }
+
+    /**
+     * 查询工单列表
+     */
+    @PreAuthorize("@ss.hasPermi('manage:task:list')")
+    @GetMapping("/list")
+    public TableDataInfo list(Task task)
+    {
+        startPage();
+        List<TaskVO> voList = taskService.selectTaskVoList(task);
+        return getDataTable(voList);
+    }
+
+
+    /**
+     * 新增工单
+     */
+    @PreAuthorize("@ss.hasPermi('manage:task:add')")
+    @Log(title = "工单", businessType = BusinessType.INSERT)
+    @PostMapping
+    public AjaxResult add(@RequestBody TaskDto taskDto)
+    {
+        // 设置指派人（登录用户）id
+        taskDto.setAssignorId(getUserId());
+        return toAjax(taskService.insertTaskDto(taskDto));
+    }
+
 }

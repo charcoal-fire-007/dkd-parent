@@ -2,6 +2,10 @@ package com.dkd.manage.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.dkd.common.constant.DkdContants;
+import com.dkd.manage.domain.VendingMachine;
+import com.dkd.manage.service.IVendingMachineService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,4 +105,47 @@ public class EmpController extends BaseController
     {
         return toAjax(empService.deleteEmpByIds(ids));
     }
+
+    @Autowired
+    private IVendingMachineService vendingMachineService;
+
+    /**
+     * 根据售货机获取运营人员列表
+     */
+    @PreAuthorize("@ss.hasPermi('manage:emp:list')")
+    @GetMapping("/businessList/{innerCode}")
+    public AjaxResult businessList(@PathVariable("innerCode") String innerCode) {
+        // 1.查询售货机信息
+        VendingMachine vm = vendingMachineService.selectVendingMachineByInnerCode(innerCode);
+        if (vm == null) {
+            return error("售货机不存在");
+        }
+        // 2.根据区域id、角色编号、员工状态查询运营人员列表
+        Emp empParam = new Emp();
+        empParam.setRegionId(vm.getRegionId());// 设备所属区域
+        empParam.setStatus(DkdContants.EMP_STATUS_NORMAL);// 员工启用
+        empParam.setRoleCode(DkdContants.ROLE_CODE_BUSINESS);// 角色编码：运营员
+        return success(empService.selectEmpList(empParam));
+    }
+
+
+    /**
+     * 根据售货机获取运维人员列表
+     */
+    @PreAuthorize("@ss.hasPermi('manage:emp:list')")
+    @GetMapping("/operationList/{innerCode}")
+    public AjaxResult getOperationList(@PathVariable("innerCode") String innerCode) {
+        // 1.查询售货机信息
+        VendingMachine vm = vendingMachineService.selectVendingMachineByInnerCode(innerCode);
+        if (vm == null) {
+            return error("售货机不存在");
+        }
+        // 2.根据区域id、角色编号、状态查询运维人员列表
+        Emp empParam = new Emp();
+        empParam.setRegionId(vm.getRegionId());// 设备所属区域
+        empParam.setStatus(DkdContants.EMP_STATUS_NORMAL);// 员工启用
+        empParam.setRoleCode(DkdContants.ROLE_CODE_OPERATOR);// 角色编码：维修员
+        return success(empService.selectEmpList(empParam));
+    }
+
 }

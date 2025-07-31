@@ -55,15 +55,15 @@ public class DkdContants {
      */
     public static final Long VM_STATUS_REVOKE = 3l;
 
-    /**
-     * 员工启用
-     */
-    public static final Boolean EMP_STATUS_NORMAL = true;
-
-    /**
-     * 员工禁用
-     */
-    public static final Boolean EMP_STATUS_DISABLE = false;
+//    /**
+//     * 员工启用
+//     */
+//    public static final Boolean EMP_STATUS_NORMAL = true;
+//
+//    /**
+//     * 员工禁用
+//     */
+//    public static final Boolean EMP_STATUS_DISABLE = false;
 
     /**
      * 角色编码：运营员
@@ -74,5 +74,15 @@ public class DkdContants {
      * 角色编码：维修员
      */
     public static final String ROLE_CODE_OPERATOR = "1003";
+
+    /**
+     * 员工启用
+     */
+    public static final Long EMP_STATUS_NORMAL = 1L;
+
+    /**
+     * 员工禁用
+     */
+    public static final Long EMP_STATUS_DISABLE = 0L;
 
 }
