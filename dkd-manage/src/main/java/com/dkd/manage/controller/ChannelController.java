@@ -101,4 +101,16 @@ public class ChannelController extends BaseController
     {
         return toAjax(channelService.deleteChannelByIds(ids));
     }
+
+    /**
+     * 根据售货机内码查询关联的货道列表
+     * @param innercode
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('manage:channel:list')")
+    @GetMapping("/list/{innercode}")
+    public AjaxResult listByInnercode(@PathVariable("innercode") String innercode)
+    {
+        return success(channelService.selectChannelVOListInnerCode(innercode));
+    }
 }

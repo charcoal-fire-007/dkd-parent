@@ -2,6 +2,7 @@ package com.dkd.manage.service.impl;
 
 import java.util.List;
 import com.dkd.common.utils.DateUtils;
+import com.dkd.manage.domain.vo.ChannelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dkd.manage.mapper.ChannelMapper;
@@ -103,5 +104,15 @@ public class ChannelServiceImpl implements IChannelService
     @Override
     public int countChannelBySkuIds(Long[] skuIds) {
         return channelMapper.countChannelBySkuIds(skuIds);
+    }
+
+    /**
+     * 根据售货机内码查询关联的货道列表
+     * @param innercode
+     * @return
+     */
+    @Override
+    public List<ChannelVO> selectChannelVOListInnerCode(String innercode) {
+        return channelMapper.selectChannelVOListInnerCode(innercode);
     }
 }

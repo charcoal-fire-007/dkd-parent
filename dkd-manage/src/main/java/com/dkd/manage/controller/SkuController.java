@@ -62,7 +62,7 @@ public class SkuController extends BaseController
     {
         List<Sku> list = skuService.selectSkuList(sku);
         ExcelUtil<Sku> util = new ExcelUtil<Sku>(Sku.class);
-        util.exportExcel(response, list, "商品管理数据");
+        util.exportEasyExcel(response, list, "商品管理数据");
     }
 
 //    导入商品列表
@@ -72,7 +72,7 @@ public class SkuController extends BaseController
     public AjaxResult excelImport(MultipartFile file) throws Exception
     {
         ExcelUtil<Sku> util = new ExcelUtil<>(Sku.class);
-        List<Sku> list = util.importExcel(file.getInputStream());
+        List<Sku> list = util.importEasyExcel(file.getInputStream());
         list.forEach(sku -> sku.setCreateTime(new Date()));
         list.forEach(sku -> sku.setUpdateTime(new Date()));
         log.info("导入商品列表：{}", list);
