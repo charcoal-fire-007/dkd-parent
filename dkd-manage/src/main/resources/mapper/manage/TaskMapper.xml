@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTaskVo">
-        select task_id, task_code, task_status, create_type, inner_code, user_id, user_name, region_id, desc, product_type_id, assignor_id, addr, create_time, update_time from tb_task
+        select task_id, task_code, task_status, create_type, inner_code, user_id, user_name, region_id, `desc`, product_type_id, assignor_id, addr, create_time, update_time from tb_task
     </sql>
 
     <select id="selectTaskList" parameterType="Task" resultMap="TaskResult">
