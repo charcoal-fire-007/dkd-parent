@@ -1,7 +1,10 @@
 package com.dkd.manage.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.dkd.common.utils.DateUtils;
+import com.dkd.manage.domain.dto.ChannelConfigDto;
 import com.dkd.manage.domain.vo.ChannelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,5 +117,28 @@ public class ChannelServiceImpl implements IChannelService
     @Override
     public List<ChannelVO> selectChannelVOListInnerCode(String innercode) {
         return channelMapper.selectChannelVOListInnerCode(innercode);
+    }
+
+    /**
+     * 货道关联商品
+     * @param channelConfigDto
+     * @return 结果
+     */
+    @Override
+    public int setChannel(ChannelConfigDto channelConfigDto) {
+        //1. dto转po
+        List<Channel> list = channelConfigDto.getChannelList().stream().map(c -> {
+            // 根据售货机编号和货道编号查询货道
+            Channel channel = channelMapper.getChannelInfo(c.getInnerCode(), c.getChannelCode());
+            if (channel != null) {
+                // 货道更新skuId
+                channel.setSkuId(c.getSkuId());
+                // 货道更新时间
+                channel.setUpdateTime(DateUtils.getNowDate());
+            }
+            return channel;
+        }).collect(Collectors.toList());
+        //2. 批量修改货道
+        return channelMapper.batchUpdateChannel(list);
     }
 }
